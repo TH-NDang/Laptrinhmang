@@ -49,16 +49,92 @@ namespace Server.Data
             using var conn = GetConnection();
             await conn.OpenAsync();
 
-            // Create tables if they don't exist
-            var createTables = @"
+            using (var cmdUsers = new MySqlCommand(@"
                 CREATE TABLE IF NOT EXISTS users (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     username VARCHAR(50) UNIQUE NOT NULL,
-                    password VARCHAR(100) NOT NULL,
-                    email VARCHAR(100) NOT NULL,
-                    role VARCHAR(20) NOT NULL DEFAULT 'users'
-                );
-                
+                    password VARCHAR(255) NOT NULL,
+                    email VARCHAR(100) UNIQUE NOT NULL,
+                    role VARCHAR(20) DEFAULT 'user',
+                    wallet_balance DECIMAL(15,2) DEFAULT 0,
+                    reward_points INT DEFAULT 0,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    last_login_at TIMESTAMP
+                )", conn))
+            {
+                await cmdUsers.ExecuteNonQueryAsync();
+            }
+
+            // T?o b?ng Auctions
+            using (var cmdAuctions = new MySqlCommand(@"
+                CREATE TABLE IF NOT EXISTS auctions (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    product_type VARCHAR(50),
+                    license_plate_number VARCHAR(20),
+                    product_name VARCHAR(100),
+                    product_description TEXT,
+                    product_image VARCHAR(255),
+                    category VARCHAR(50),
+                    starting_price DECIMAL(15,2) NOT NULL,
+                    current_price DECIMAL(15,2) NOT NULL,
+                    minimum_increment DECIMAL(15,2) DEFAULT 1000,
+                    start_time TIMESTAMP NOT NULL,
+                    end_time TIMESTAMP NOT NULL,
+                    winner_id INT,
+                    status VARCHAR(20) DEFAULT 'Active',
+                    FOREIGN KEY (winner_id) REFERENCES users(id)
+                )", conn))
+            {
+                await cmdAuctions.ExecuteNonQueryAsync();
+            }
+
+            using (var cmdBids = new MySqlCommand(@"
+                CREATE TABLE IF NOT EXISTS bids (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    auction_id INT NOT NULL,
+                    user_id INT NOT NULL,
+                    amount DECIMAL(15,2) NOT NULL,
+                    bid_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (auction_id) REFERENCES auctions(id),
+                    FOREIGN KEY (user_id) REFERENCES users(id)
+                )", conn))
+            {
+                await cmdBids.ExecuteNonQueryAsync();
+            }
+
+            using (var cmdInvestments = new MySqlCommand(@"
+                CREATE TABLE IF NOT EXISTS investments (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    user_id INT NOT NULL,
+                    amount DECIMAL(15,2) NOT NULL,
+                    interest_rate DECIMAL(5,2) NOT NULL,
+                    period_in_months INT NOT NULL,
+                    start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    end_date TIMESTAMP NOT NULL,
+                    status VARCHAR(20) DEFAULT 'Active',
+                    expected_return DECIMAL(15,2) NOT NULL,
+                    FOREIGN KEY (user_id) REFERENCES users(id)
+                )", conn))
+            {
+                await cmdInvestments.ExecuteNonQueryAsync();
+            }
+
+            using (var cmdWalletTransactions = new MySqlCommand(@"
+                CREATE TABLE IF NOT EXISTS wallet_transactions (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    user_id INT NOT NULL,
+                    amount DECIMAL(15,2) NOT NULL,
+                    type VARCHAR(20) NOT NULL,
+                    status VARCHAR(20) NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    description TEXT,
+                    FOREIGN KEY (user_id) REFERENCES users(id)
+                )", conn))
+            {
+                await cmdWalletTransactions.ExecuteNonQueryAsync();
+            }
+
+            var createTables = @"
                 CREATE TABLE IF NOT EXISTS user_info (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     user_id INT NOT NULL,
@@ -68,28 +144,6 @@ namespace Server.Data
                     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
                 );
 
-
-                CREATE TABLE IF NOT EXISTS auctions (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    license_plate_number VARCHAR(20) NOT NULL,
-                    starting_price DECIMAL(10,2) NOT NULL,
-                    current_price DECIMAL(10,2) NOT NULL,
-                    start_time DATETIME NOT NULL,
-                    end_time DATETIME NOT NULL,
-                    winner_id INT,
-                    status VARCHAR(20) NOT NULL,
-                    FOREIGN KEY (winner_id) REFERENCES users(id)
-                );
-
-                CREATE TABLE IF NOT EXISTS bids (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    auction_id INT NOT NULL,
-                    user_id INT NOT NULL,
-                    amount DECIMAL(10,2) NOT NULL,
-                    bid_time DATETIME NOT NULL,
-                    FOREIGN KEY (auction_id) REFERENCES auctions(id),
-                    FOREIGN KEY (user_id) REFERENCES users(id)
-                );
                 CREATE TABLE IF NOT EXISTS payment_history (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     history_username VARCHAR(50) NOT NULL,
@@ -97,15 +151,15 @@ namespace Server.Data
                     history_amount DECIMAL(10,2) NOT NULL,
                     payment_method VARCHAR(20) NOT NULL,
                     payment_time DATETIME NOT NULL,
-                    status ENUM('Th‡nh cÙng', 'Th?t b?i') NOT NULL,
+                    status ENUM('Th√†nh c√¥ng', 'Th?t b?i') NOT NULL,
                     user_id INT,
                     auction_id INT,
                     FOREIGN KEY (user_id) REFERENCES users(id),
                     FOREIGN KEY (auction_id) REFERENCES auctions(id)
                 );";
 
-            using var cmd = new MySqlCommand(createTables, conn);
-            await cmd.ExecuteNonQueryAsync();
+            using var cmdCreateTables = new MySqlCommand(createTables, conn);
+            await cmdCreateTables.ExecuteNonQueryAsync();
 
             // Insert sample data if tables are empty
             if (!await TableHasData(conn, "users"))
@@ -151,7 +205,7 @@ namespace Server.Data
             cmd.Parameters.AddWithValue("@id", id);
 
             var result = await cmd.ExecuteScalarAsync();
-            return result != null ? Convert.ToInt32(result) : -1;  // Tr? v? -1 n?u khÙng tÏm th?y ??u gi·
+            return result != null ? Convert.ToInt32(result) : -1;  // Tr? v? -1 n?u kh√¥ng t√¨m th?y ??u gi√°
         }
 
         public async Task<(string licensePlateNumber, decimal totalAmount)> GetAuctionDetailsAndTotalAmount(int id)
@@ -169,7 +223,7 @@ namespace Server.Data
                 using var reader = await cmd.ExecuteReaderAsync();
                 if (await reader.ReadAsync())
                 {
-                    // Ki?m tra xem gi· tr? cÛ ph?i l‡ DBNull khÙng
+                    // Ki?m tra xem gi√° tr? c√≥ ph?i l√† DBNull kh√¥ng
                     if (!reader.IsDBNull(reader.GetOrdinal("license_plate_number")))
                     {
                         licensePlateNumber = reader.GetString("license_plate_number");
@@ -177,12 +231,12 @@ namespace Server.Data
                 }
             }
 
-            // TÌnh t?ng s? ti?n thanh to·n t? b?ng bids
+            // T√≠nh t?ng s? ti?n thanh to√°n t? b?ng bids
             using (var cmd = new MySqlCommand("SELECT SUM(amount) FROM bids WHERE user_id = @id", conn))
             {
                 cmd.Parameters.AddWithValue("@id", id);
                 var result = await cmd.ExecuteScalarAsync();
-                // Ki?m tra xem gi· tr? cÛ ph?i l‡ DBNull khÙng
+                // Ki?m tra xem gi√° tr? c√≥ ph?i l√† DBNull kh√¥ng
                 totalAmount = result != null && !Convert.IsDBNull(result) ? Convert.ToDecimal(result) : 0;
             }
 
@@ -234,6 +288,74 @@ namespace Server.Data
             adapter.Fill(dataTable);
 
             return dataTable;
+        }
+
+
+        public async Task<T> QuerySingleAsync<T>(string sql, object param = null)
+        {
+            using var conn = GetConnection();
+            await conn.OpenAsync();
+            using var cmd = new MySqlCommand(sql, conn);
+
+            if (param != null)
+            {
+                foreach (var prop in param.GetType().GetProperties())
+                {
+                    cmd.Parameters.AddWithValue($"@{prop.Name}", prop.GetValue(param) ?? DBNull.Value);
+                }
+            }
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
+            {
+                return (T)Convert.ChangeType(reader[0], typeof(T));
+            }
+            return default;
+        }
+
+        public async Task<List<T>> QueryAsync<T>(string sql, object param = null) where T : new()
+        {
+            var results = new List<T>();
+            using var conn = GetConnection();
+            await conn.OpenAsync();
+            using var cmd = new MySqlCommand(sql, conn);
+
+            if (param != null)
+            {
+                foreach (var prop in param.GetType().GetProperties())
+                {
+                    cmd.Parameters.AddWithValue($"@{prop.Name}", prop.GetValue(param) ?? DBNull.Value);
+                }
+            }
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                var item = new T();
+                for (var i = 0; i < reader.FieldCount; i++)
+                {
+                    var property = typeof(T).GetProperty(ToPascalCase(reader.GetName(i)));
+                    if (property != null && reader[i] != DBNull.Value)
+                    {
+                        property.SetValue(item, Convert.ChangeType(reader[i], property.PropertyType));
+                    }
+                }
+                results.Add(item);
+            }
+            return results;
+        }
+
+        private string ToPascalCase(string str)
+        {
+            var words = str.Split('_');
+            for (var i = 0; i < words.Length; i++)
+            {
+                if (words[i].Length > 0)
+                {
+                    words[i] = char.ToUpper(words[i][0]) + words[i].Substring(1).ToLower();
+                }
+            }
+            return string.Concat(words);
         }
 
     }

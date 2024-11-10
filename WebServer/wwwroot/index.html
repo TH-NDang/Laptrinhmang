@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Đấu Giá Biển Số Xe</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2">
+                        <i class="fas fa-gavel text-2xl"></i>
+                        <span class="text-xl font-bold">BiểnSốĐẹp</span>
+                    </a>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="/auctions" class="hover:text-blue-200">Đấu Giá</a>
+                        <a href="/about" class="hover:text-blue-200">Giới Thiệu</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/account" class="hover:text-blue-200">
+                        <i class="fas fa-wallet mr-1"></i>
+                        <span id="walletBalance">0 VNĐ</span>
+                    </a>
+                    <div class="relative" id="userMenu">
+                        <button class="flex items-center space-x-1 hover:text-blue-200">
+                            <i class="fas fa-user-circle text-xl"></i>
+                            <span id="username">Đăng nhập</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-b from-blue-900 to-blue-700 text-white py-20">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6">Đấu Giá Biển Số Xe</h1>
+                <p class="text-xl mb-8">Nền tảng đấu giá trực tuyến uy tín với cơ hội sinh lời cho số dư tài khoản</p>
+                <div class="flex justify-center">
+                    <a href="/auctions" class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold">
+                        Tham Gia Ngay
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Auctions -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-8 text-center">Phiên Đấu Giá Nổi Bật</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="featuredAuctions">
+                    <!-- Auction cards will be inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Unique Features -->
+        <section class="py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-12 text-center">Tại Sao Chọn Chúng Tôi?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="text-blue-600 text-4xl mb-4 text-center">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4 text-center">Đa Nền Tảng</h3>
+                        <p class="text-gray-600">
+                            Truy cập dễ dàng từ mọi thiết bị - điện thoại, máy tính bảng và desktop. 
+                            Giao diện tối ưu cho từng thiết bị giúp bạn không bỏ lỡ cơ hội đấu giá.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="text-blue-600 text-4xl mb-4 text-center">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4 text-center">Sinh Lời Thông Minh</h3>
+                        <p class="text-gray-600">
+                            Số dư trong tài khoản được tự động tham gia chương trình tích lũy với lãi suất hấp dẫn.
+                            Tiền của bạn không nằm im mà sinh lời mỗi ngày.
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <div class="text-blue-600 text-4xl mb-4 text-center">
+                            <i class="fas fa-mouse-pointer"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4 text-center">Thao Tác Đơn Giản</h3>
+                        <p class="text-gray-600">
+                            Giao diện trực quan, dễ sử dụng. Chỉ với vài cú click, bạn đã có thể tham gia đấu giá.
+                            Hệ thống thông báo realtime giúp bạn không bỏ lỡ thông tin quan trọng.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-12 text-center">Quy Trình Đơn Giản</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">1</div>
+                        <h3 class="text-lg font-semibold mb-2">Đăng Ký & Nạp Tiền</h3>
+                        <p class="text-gray-600">Tạo tài khoản và nạp tiền chỉ trong vài phút</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">2</div>
+                        <h3 class="text-lg font-semibold mb-2">Chọn Biển Số</h3>
+                        <p class="text-gray-600">Lựa chọn biển số yêu thích từ danh sách</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">3</div>
+                        <h3 class="text-lg font-semibold mb-2">Đặt Giá</h3>
+                        <p class="text-gray-600">Tham gia đấu giá với mức giá mong muốn</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">4</div>
+                        <h3 class="text-lg font-semibold mb-2">Nhận Biển Số</h3>
+                        <p class="text-gray-600">Hoàn tất thủ tục và nhận biển số khi thắng</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Về Chúng Tôi</h4>
+                    <p class="text-gray-400">Nền tảng đấu giá biển số xe trực tuyến hàng đầu với công nghệ hiện đại và bảo mật cao</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Hỗ Trợ 24/7</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">Hotline: 1900 xxxx</li>
+                        <li class="text-gray-400">Email: support@bienso.vn</li>
+                        <li class="text-gray-400">Zalo: zalo.me/bienso</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Chứng Nhận</h4>
+                    <p class="text-gray-400">Được cấp phép bởi Bộ Công an và các cơ quan chức năng liên quan</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 BiểnSốĐẹp. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fetch featured auctions
+        fetch('/api/auctions/featured')
+            .then(response => response.json())
+            .then(auctions => {
+                const container = document.getElementById('featuredAuctions');
+                auctions.forEach(auction => {
+                    container.innerHTML += `
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">${auction.licensePlateNumber}</h3>
+                                <div class="flex justify-between items-center">
+                                    <div class="text-lg font-bold text-blue-600">
+                                        ${auction.currentPrice.toLocaleString('vi-VN')} VNĐ
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        Còn lại: ${getTimeRemaining(auction.endTime)}
+                                    </div>
+                                </div>
+                                <a href="/auctions/${auction.id}" 
+                                   class="block text-center bg-blue-600 text-white py-2 rounded-lg mt-4 hover:bg-blue-700">
+                                    Đấu Giá Ngay
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+
+        function getTimeRemaining(endTime) {
+            const total = Date.parse(endTime) - Date.parse(new Date());
+            const hours = Math.floor((total / (1000 * 60 * 60)));
+            return hours > 24 ? 
+                `${Math.floor(hours / 24)} ngày` : 
+                `${hours} giờ`;
+        }
+
+        // Check login status
+        fetch('/api/auth/status')
+            .then(response => response.json())
+            .then(user => {
+                if (user) {
+                    document.getElementById('username').textContent = user.username;
+                    document.getElementById('walletBalance').textContent = 
+                        `${user.walletBalance.toLocaleString('vi-VN')} VNĐ`;
+                }
+            });
+    </script>
+</body>
+</html>

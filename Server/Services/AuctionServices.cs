@@ -38,13 +38,18 @@ namespace Server.Services
                 auctions.Add(new Auction
                 {
                     Id = reader.GetInt32("id"),
-                    LicensePlateNumber = reader.GetString("license_plate_number"),
+                    ProductType = reader.GetString("product_type"),
+                    LicensePlateNumber = reader.IsDBNull("license_plate_number") ? string.Empty : reader.GetString("license_plate_number"),
                     StartingPrice = reader.GetDecimal("starting_price"),
                     CurrentPrice = reader.GetDecimal("current_price"),
                     StartTime = reader.GetDateTime("start_time"),
                     EndTime = reader.GetDateTime("end_time"),
                     WinnerId = reader.IsDBNull("winner_id") ? null : reader.GetInt32("winner_id"),
-                    Status = reader.GetString("status")
+                    Status = reader.GetString("status"),
+                    ProductName = reader.GetString("product_name"),
+                    ProductDescription = reader.GetString("product_description"),
+                    Category = reader.GetString("category"),
+                    MinimumIncrement = reader.GetDecimal("minimum_increment")
                 });
             }
 
@@ -242,49 +247,50 @@ namespace Server.Services
             return status?.ToString(); // Tr? v? tr?ng thái ho?c null n?u không t́m th?y
         }
 
-        public async Task<bool> UpdateAuction(Auction updatedAuction)
+        public async Task<bool> UpdateAuction(Auction auction)
         {
             using var conn = _dbContext.GetConnection();
             await conn.OpenAsync();
 
-            //Kiểm tra phiên đấu giá tồn tại chưa
-            var checkSql = @"SELECT status FROM auctions WHERE id = @auctionId";
-            using var checkCmd = new MySqlCommand(checkSql, conn);
-            checkCmd.Parameters.AddWithValue("@auctionId", updatedAuction.Id);
+            var sql = @"UPDATE auctions 
+                SET product_type = @productType,
+                    license_plate_number = @licensePlateNumber,
+                    product_name = @productName,
+                    product_description = @productDescription,
+                    category = @category,
+                    starting_price = @startingPrice,
+                    current_price = @currentPrice,
+                    minimum_increment = @minimumIncrement,
+                    start_time = @startTime,
+                    end_time = @endTime,
+                    status = @status
+                WHERE id = @id";
 
-            var status = await checkCmd.ExecuteScalarAsync();
-            if (status == null || status.ToString() != "Active")
-                return false; 
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@id", auction.Id);
+            cmd.Parameters.AddWithValue("@productType", auction.ProductType);
+            cmd.Parameters.AddWithValue("@licensePlateNumber", (object)auction.LicensePlateNumber ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@productName", auction.ProductName);
+            cmd.Parameters.AddWithValue("@productDescription", auction.ProductDescription);
+            cmd.Parameters.AddWithValue("@category", auction.Category);
+            cmd.Parameters.AddWithValue("@startingPrice", auction.StartingPrice);
+            cmd.Parameters.AddWithValue("@currentPrice", auction.CurrentPrice);
+            cmd.Parameters.AddWithValue("@minimumIncrement", auction.MinimumIncrement);
+            cmd.Parameters.AddWithValue("@startTime", auction.StartTime);
+            cmd.Parameters.AddWithValue("@endTime", auction.EndTime);
+            cmd.Parameters.AddWithValue("@status", auction.Status);
 
             try
             {
-                //Cập nhật
-                var updateSql = @"UPDATE auctions 
-                          SET license_plate_number = @licensePlateNumber, 
-                              starting_price = @startingPrice, 
-                              current_price = @currentPrice, 
-                              start_time = @startTime, 
-                              end_time = @endTime, 
-                              status = @status 
-                          WHERE id = @auctionId";
-
-                using var updateCmd = new MySqlCommand(updateSql, conn);
-                updateCmd.Parameters.AddWithValue("@licensePlateNumber", updatedAuction.LicensePlateNumber);
-                updateCmd.Parameters.AddWithValue("@startingPrice", updatedAuction.StartingPrice);
-                updateCmd.Parameters.AddWithValue("@currentPrice", updatedAuction.CurrentPrice);
-                updateCmd.Parameters.AddWithValue("@startTime", updatedAuction.StartTime);
-                updateCmd.Parameters.AddWithValue("@endTime", updatedAuction.EndTime);
-                updateCmd.Parameters.AddWithValue("@status", updatedAuction.Status);
-                updateCmd.Parameters.AddWithValue("@auctionId", updatedAuction.Id);
-
-                var rowsAffected = await updateCmd.ExecuteNonQueryAsync();
-                return rowsAffected > 0; 
+                var result = await cmd.ExecuteNonQueryAsync();
+                return result > 0;
             }
-            catch
+            catch (Exception)
             {
                 return false;
             }
         }
+
         public async Task<bool> DeleteAuction(int auctionId)
         {
             using var conn = _dbContext.GetConnection();
@@ -295,17 +301,17 @@ namespace Server.Services
             var count = Convert.ToInt32(await checkCmd.ExecuteScalarAsync());
 
             if (count == 0)
-                return false; 
+                return false;
 
             try
             {
-           
+
                 var deleteSql = @"DELETE FROM auctions WHERE id = @auctionId";
                 using var deleteCmd = new MySqlCommand(deleteSql, conn);
                 deleteCmd.Parameters.AddWithValue("@auctionId", auctionId);
                 var rowsAffected = await deleteCmd.ExecuteNonQueryAsync();
 
-                return rowsAffected > 0; 
+                return rowsAffected > 0;
             }
             catch
             {
@@ -331,6 +337,100 @@ namespace Server.Services
             var rowsAffected = await cmd.ExecuteNonQueryAsync();
             return rowsAffected > 0;
         }
+
+
+
+        // Phương thức mới cho Category
+        public async Task<List<Auction>> GetAuctionsByCategory(string category)
+        {
+            var auctions = new List<Auction>();
+            using var conn = _dbContext.GetConnection();
+            await conn.OpenAsync();
+
+            var sql = @"SELECT * FROM auctions WHERE category = @category AND status = 'Active'";
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@category", category);
+            using var reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                auctions.Add(new Auction
+                {
+                    Id = reader.GetInt32("id"),
+                    ProductType = reader.GetString("product_type"),
+                    LicensePlateNumber = reader.IsDBNull("license_plate_number") ? string.Empty : reader.GetString("license_plate_number"),
+                    StartingPrice = reader.GetDecimal("starting_price"),
+                    CurrentPrice = reader.GetDecimal("current_price"),
+                    StartTime = reader.GetDateTime("start_time"),
+                    EndTime = reader.GetDateTime("end_time"),
+                    WinnerId = reader.IsDBNull("winner_id") ? null : reader.GetInt32("winner_id"),
+                    Status = reader.GetString("status"),
+                    ProductName = reader.GetString("product_name"),
+                    ProductDescription = reader.GetString("product_description"),
+                    Category = reader.GetString("category"),
+                    MinimumIncrement = reader.GetDecimal("minimum_increment")
+                });
+            }
+
+            return auctions;
+        }
+
+        public async Task<List<string>> GetCategories()
+        {
+            var categories = new List<string>();
+            using var conn = _dbContext.GetConnection();
+            await conn.OpenAsync();
+
+            var sql = "SELECT DISTINCT category FROM auctions WHERE status = 'Active'";
+            using var cmd = new MySqlCommand(sql, conn);
+            using var reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                categories.Add(reader.GetString(0));
+            }
+
+            return categories;
+        }
+
+        public async Task<bool> CreateAuction(Auction auction)
+        {
+            using var conn = _dbContext.GetConnection();
+            await conn.OpenAsync();
+
+            var sql = @"INSERT INTO auctions 
+                (product_type, license_plate_number, product_name, product_description, 
+                category, starting_price, current_price, minimum_increment, 
+                start_time, end_time, status)
+                VALUES 
+                (@productType, @licensePlateNumber, @productName, @productDescription,
+                @category, @startingPrice, @currentPrice, @minimumIncrement,
+                @startTime, @endTime, @status)";
+
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@productType", auction.ProductType);
+            cmd.Parameters.AddWithValue("@licensePlateNumber", (object)auction.LicensePlateNumber ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@productName", auction.ProductName);
+            cmd.Parameters.AddWithValue("@productDescription", auction.ProductDescription);
+            cmd.Parameters.AddWithValue("@category", auction.Category);
+            cmd.Parameters.AddWithValue("@startingPrice", auction.StartingPrice);
+            cmd.Parameters.AddWithValue("@currentPrice", auction.CurrentPrice);
+            cmd.Parameters.AddWithValue("@minimumIncrement", auction.MinimumIncrement);
+            cmd.Parameters.AddWithValue("@startTime", auction.StartTime);
+            cmd.Parameters.AddWithValue("@endTime", auction.EndTime);
+            cmd.Parameters.AddWithValue("@status", auction.Status);
+
+            try
+            {
+                var result = await cmd.ExecuteNonQueryAsync();
+                return result > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
 
 
     }

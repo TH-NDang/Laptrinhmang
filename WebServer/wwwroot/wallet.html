@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Ví Của Tôi</title>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-blue-500 text-white p-4">
+        <nav class="container mx-auto flex justify-between">
+            <a href="index.html" class="text-lg font-bold">Hệ thống Đấu giá</a>
+        </nav>
+    </header>
+    <main class="container mx-auto mt-6">
+        <h1 class="text-2xl font-bold">Ví Của Tôi</h1>
+        <p class="mt-4">Số dư hiện tại: <span id="balance">0</span> VND</p>
+    </main>
+    <script>
+        fetch('http://localhost:5000/api/user/wallet')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('balance').textContent = data.balance;
+            });
+    </script>
+</body>
+</html>

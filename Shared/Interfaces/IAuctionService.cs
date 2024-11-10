@@ -59,5 +59,8 @@ namespace Shared.Interfaces
         Task<bool> UpdateAuction(Auction updatedAuction);
         Task<bool> DeleteAuction(int auctionId);
         Task<bool> AddAuction(Auction newAuction);
+
+        Task<List<Auction>> GetAuctionsByCategory(string category);
+        Task<List<string>> GetCategories();
     }
 }

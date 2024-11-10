@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đấu Giá Biển Số - BiểnSốĐẹp</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="/js/main.js" defer></script>
+    <script src="/js/auction.js" defer></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation (giống trang chủ) -->
+    <nav class="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2">
+                        <i class="fas fa-gavel text-2xl"></i>
+                        <span class="text-xl font-bold">BiểnSốĐẹp</span>
+                    </a>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="/auctions" class="hover:text-blue-200">Đấu Giá</a>
+                        <a href="/about" class="hover:text-blue-200">Giới Thiệu</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/account" class="hover:text-blue-200">
+                        <i class="fas fa-wallet mr-1"></i>
+                        <span id="walletBalance">0 VNĐ</span>
+                    </a>
+                    <div class="relative" id="userMenu">
+                        <button class="flex items-center space-x-1 hover:text-blue-200">
+                            <i class="fas fa-user-circle text-xl"></i>
+                            <span id="username">Đăng nhập</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Filter Section -->
+        <section class="mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Bộ Lọc</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Khu Vực</label>
+                        <select id="regionFilter" class="w-full border rounded-lg p-2">
+                            <option value="">Tất cả</option>
+                            <option value="north">Miền Bắc</option>
+                            <option value="central">Miền Trung</option>
+                            <option value="south">Miền Nam</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Giá</label>
+                        <select id="priceFilter" class="w-full border rounded-lg p-2">
+                            <option value="">Tất cả</option>
+                            <option value="0-500">Dưới 500 triệu</option>
+                            <option value="500-1000">500 triệu - 1 tỷ</option>
+                            <option value="1000+">Trên 1 tỷ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Thời Gian Còn Lại</label>
+                        <select id="timeFilter" class="w-full border rounded-lg p-2">
+                            <option value="">Tất cả</option>
+                            <option value="1">Dưới 1 giờ</option>
+                            <option value="24">Dưới 24 giờ</option>
+                            <option value="48">Dưới 48 giờ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Sắp Xếp</label>
+                        <select id="sortFilter" class="w-full border rounded-lg p-2">
+                            <option value="time_asc">Sắp kết thúc</option>
+                            <option value="time_desc">Mới nhất</option>
+                            <option value="price_asc">Giá tăng dần</option>
+                            <option value="price_desc">Giá giảm dần</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Auction Listings -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6" id="auctionList">
+            <!-- Auction items will be inserted here by JavaScript -->
+        </section>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="hidden">
+            <div class="flex justify-center items-center py-8">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-8 flex justify-center" id="pagination">
+            <nav class="inline-flex rounded-lg shadow">
+                <button id="prevPage" class="px-3 py-2 rounded-l-lg bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50">
+                    Trước
+                </button>
+                <div id="pageNumbers" class="flex">
+                    <!-- Page numbers will be inserted here -->
+                </div>
+                <button id="nextPage" class="px-3 py-2 rounded-r-lg bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-50">
+                    Sau
+                </button>
+            </nav>
+        </div>
+    </main>
+
+    <!-- Auction Detail Modal -->
+    <div id="auctionModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden">
+        <div class="container mx-auto px-4 h-full flex items-center justify-center">
+            <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold" id="modalLicensePlate"></h2>
+                        <button onclick="closeAuctionModal()" class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                                <h3 class="font-semibold mb-2">Thông Tin Đấu Giá</h3>
+                                <div class="space-y-2">
+                                    <p>Giá hiện tại: <span id="modalCurrentPrice" class="font-bold text-blue-600"></span></p>
+                                    <p>Thời gian còn lại: <span id="modalTimeLeft"></span></p>
+                                    <p>Số lượt đấu giá: <span id="modalBidCount"></span></p>
+                                </div>
+                            </div>
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                <h3 class="font-semibold mb-2">Đặt Giá</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-gray-700 mb-2">Số tiền (VNĐ)</label>
+                                        <input type="number" id="bidAmount" 
+                                               class="w-full border rounded-lg p-2" 
+                                               step="1000000">
+                                    </div>
+                                    <button onclick="placeBid()" 
+                                            class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+                                        Đặt Giá
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="bg-gray-100 p-4 rounded-lg">
+                                <h3 class="font-semibold mb-2">Lịch Sử Đấu Giá</h3>
+                                <div id="bidHistory" class="space-y-2">
+                                    <!-- Bid history will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer (giống trang chủ) -->
+    <footer class="bg-gray-800 text-white py-8 mt-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Về Chúng Tôi</h4>
+                    <p class="text-gray-400">Nền tảng đấu giá biển số xe trực tuyến hàng đầu với công nghệ hiện đại và bảo mật cao</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Hỗ Trợ 24/7</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">Hotline: 1900 xxxx</li>
+                        <li class="text-gray-400">Email: support@bienso.vn</li>
+                        <li class="text-gray-400">Zalo: zalo.me/bienso</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Chứng Nhận</h4>
+                    <p class="text-gray-400">Được cấp phép bởi Bộ Công an và các cơ quan chức năng liên quan</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 BiểnSốĐẹp. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

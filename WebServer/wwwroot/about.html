@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Về Chúng Tôi - BiểnSốĐẹp</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-50">
+    <!-- Navigation - Giống trang chủ -->
+    <nav class="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+          <div class="flex items-center space-x-8">
+            <a href="/" class="flex items-center space-x-2">
+              <i class="fas fa-gavel text-2xl"></i>
+              <span class="text-xl font-bold">BiểnSốĐẹp</span>
+            </a>
+            <div class="hidden md:flex space-x-6">
+              <a href="/auctions" class="hover:text-blue-200">Đấu Giá</a>
+              <a href="/about" class="hover:text-blue-200">Giới Thiệu</a>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <a href="/account" class="hover:text-blue-200">
+              <i class="fas fa-wallet mr-1"></i>
+              <span id="walletBalance">0 VNĐ</span>
+            </a>
+            <div class="relative" id="userMenu">
+              <button class="flex items-center space-x-1 hover:text-blue-200">
+                <i class="fas fa-user-circle text-xl"></i>
+                <span id="username">Đăng nhập</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <!-- Hero Section -->
+      <section
+        class="bg-gradient-to-b from-blue-900 to-blue-700 text-white py-16"
+      >
+        <div class="container mx-auto px-4 text-center">
+          <h1 class="text-4xl font-bold mb-4">Về Chúng Tôi</h1>
+          <p class="text-xl max-w-2xl mx-auto">
+            Chúng tôi là những sinh viên đam mê công nghệ từ trường Đại học Giao
+            thông Vận tải TP.HCM, với mục tiêu tạo ra nền tảng đấu giá biển số xe
+            hiện đại và tiện lợi nhất.
+          </p>
+        </div>
+      </section>
+
+      <!-- Our Vision -->
+      <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+          <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-6">Tầm Nhìn</h2>
+            <p class="text-gray-600 mb-8">
+              Chúng tôi hướng đến việc xây dựng một nền tảng đấu giá trực tuyến
+              không chỉ hiện đại và bảo mật mà còn mang lại giá trị thực sự cho
+              người dùng thông qua các tính năng thông minh và tiện ích.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team Members -->
+      <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+          <h2 class="text-3xl font-bold mb-12 text-center">
+            Đội Ngũ Phát Triển
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Member 1 -->
+            <div
+              class="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition-transform duration-300"
+            >
+              <div class="flex items-center justify-center mb-4">
+                <div
+                  class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center"
+                >
+                  <i class="fas fa-user text-blue-600 text-2xl"></i>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-center mb-2">
+                Nguyễn Văn Hóa
+              </h3>
+              <p class="text-blue-600 text-center mb-4">Nhóm Trưởng</p>
+              <p class="text-gray-600 text-center mb-4">
+                Phụ trách quản lý dự án
+              </p>
+              <div class="flex justify-center space-x-4">
+                <a href="#" class="text-gray-400 hover:text-blue-600">
+                  <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-blue-600">
+                  <i class="fab fa-linkedin"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Member 2 -->
+            <div
+              class="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition-transform duration-300"
+            >
+              <div class="flex items-center justify-center mb-4">
+                <div
+                  class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center"
+                >
+                  <i class="fas fa-user text-blue-600 text-2xl"></i>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-center mb-2">
+                Tán Hoàng Minh Khôi
+              </h3>
+              <p class="text-blue-600 text-center mb-4">Frontend Developer</p>
+              <p class="text-gray-600 text-center mb-4">
+                Thiết kế và phát triển giao diện người dùng
+              </p>
+              <div class="flex justify-center space-x-4">
+                <a href="#" class="text-gray-400 hover:text-blue-600">
+                  <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-blue-600">
+                  <i class="fab fa-linkedin"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Member 3 -->
+            <div
+              class="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition-transform duration-300"
+            >
+              <div class="flex items-center justify-center mb-4">
+                <div
+                  class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center"
+                >
+                  <i class="fas fa-user text-blue-600 text-2xl"></i>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-center mb-2">Nguyễn Phi Khanh</h3>
+              <p class="text-blue-600 text-center mb-4"> Thiết kế và phát triển giao diện người dùng</p>
+              <p class="text-gray-600 text-center mb-4">
+                Xây dựng và tối ưu hóa hệ thống backend
+              </p>
+              <div class="flex justify-center space-x-4">
+                <a href="#" class="text-gray-400 hover:text-blue-600">
+                  <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-blue-600">
+                  <i class="fab fa-linkedin"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Member 4 -->
+            <div
+              class="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition-transform duration-300"
+            >
+              <div class="flex items-center justify-center mb-4">
+                <div
+                  class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center"
+                >
+                  <i class="fas fa-user text-blue-600 text-2xl"></i>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-center mb-2">Nguyễn Nhật Lâm</h3>
+              <p class="text-blue-600 text-center mb-4"> Thiết kế và phát triển giao diện người dùng</p>
+              <p class="text-gray-600 text-center mb-4">
+                Xây dựng và tối ưu hóa hệ thống backend
+              </p>
+              <div class="flex justify-center space-x-4">
+                <a href="#" class="text-gray-400 hover:text-blue-600">
+                  <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-blue-600">
+                  <i class="fab fa-linkedin"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Member 5 -->
+            <div
+              class="bg-white rounded-xl shadow-lg p-6 transform hover:scale-105 transition-transform duration-300"
+            >
+              <div class="flex items-center justify-center mb-4">
+                <div
+                  class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center"
+                >
+                  <i class="fas fa-user text-blue-600 text-2xl"></i>
+                </div>
+              </div>
+              <h3 class="text-xl font-semibold text-center mb-2">Nguyễn Ngọc Đặng</h3>
+              <p class="text-blue-600 text-center mb-4">Backend</p>
+              <p class="text-gray-600 text-center mb-4">
+                Kiểm thử sản phẩm
+              </p>
+              <div class="flex justify-center space-x-4">
+                <a href="#" class="text-gray-400 hover:text-blue-600">
+                  <i class="fab fa-github"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-blue-600">
+                  <i class="fab fa-linkedin"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+          <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-8">Liên Hệ</h2>
+            <p class="text-gray-600 mb-8">
+              Bạn có câu hỏi hoặc đề xuất? Hãy liên hệ với chúng tôi qua các kênh
+              sau:
+            </p>
+            <div class="flex justify-center space-x-8">
+              <div>
+                <i class="fas fa-envelope text-blue-600 text-2xl mb-2"></i>
+                <p class="text-gray-600">support@bienso.vn</p>
+              </div>
+              <div>
+                <i class="fas fa-phone text-blue-600 text-2xl mb-2"></i>
+                <p class="text-gray-600">1900 xxxx</p>
+              </div>
+              <div>
+                <i class="fas fa-map-marker-alt text-blue-600 text-2xl mb-2"></i>
+                <p class="text-gray-600">TP.HCM, Việt Nam</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Technology Stack -->
+      <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+          <h2 class="text-3xl font-bold mb-12 text-center">Công Nghệ Sử Dụng</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Backend -->
+            <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+              <div class="text-blue-600 text-4xl mb-4">
+                <i class="fas fa-server"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Backend</h3>
+              <ul class="text-gray-600 space-y-2">
+                <li>C# / .NET Core</li>
+                <li>MySQL</li>
+                <li>RESTful API</li>
+              </ul>
+            </div>
+
+            <!-- Frontend -->
+            <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+              <div class="text-blue-600 text-4xl mb-4">
+                <i class="fas fa-desktop"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Frontend</h3>
+              <ul class="text-gray-600 space-y-2">
+                <li>HTML5/CSS3</li>
+                <li>Tailwind CSS</li>
+                <li>JavaScript</li>
+              </ul>
+            </div>
+
+            <!-- Security -->
+            <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+              <div class="text-blue-600 text-4xl mb-4">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Bảo Mật</h3>
+              <ul class="text-gray-600 space-y-2">
+                <li>JWT Authentication</li>
+                <li>Data Encryption</li>
+                <li>HTTPS Protocol</li>
+              </ul>
+            </div>
+
+            <!-- Testing -->
+            <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+              <div class="text-blue-600 text-4xl mb-4">
+                <i class="fas fa-vial"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Kiểm Thử</h3>
+              <ul class="text-gray-600 space-y-2">
+                <li>Unit Testing</li>
+                <li>Selenium</li>
+                <li>Automated Testing</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Project Timeline -->
+      <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+          <h2 class="text-3xl font-bold mb-12 text-center">
+            Quá Trình Phát Triển
+          </h2>
+          <div class="max-w-4xl mx-auto">
+            <div class="relative">
+              <!-- Timeline line -->
+              <div
+                class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-blue-200"
+              ></div>
+
+              <!-- Timeline items -->
+              <div class="space-y-12">
+                <!-- Phase 1 -->
+                <div class="relative">
+                  <div class="ml-auto w-1/2 pl-8">
+                    <div
+                      class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    >
+                      <div
+                        class="w-6 h-6 bg-blue-600 rounded-full border-4 border-white"
+                      ></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                      <h3 class="text-xl font-semibold mb-2">
+                        Lên Ý Tưởng & Nghiên Cứu
+                      </h3>
+                      <p class="text-gray-600">
+                        Phân tích nhu cầu thị trường và tìm hiểu các giải pháp
+                        công nghệ phù hợp.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="relative">
+                  <div class="mr-auto w-1/2 pr-8">
+                    <div
+                      class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    >
+                      <div
+                        class="w-6 h-6 bg-blue-600 rounded-full border-4 border-white"
+                      ></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                      <h3 class="text-xl font-semibold mb-2">
+                        Thiết Kế & Phát Triển
+                      </h3>
+                      <p class="text-gray-600">
+                        Xây dựng kiến trúc hệ thống và phát triển các tính năng
+                        cốt lõi.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="relative">
+                  <div class="ml-auto w-1/2 pl-8">
+                    <div
+                      class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    >
+                      <div
+                        class="w-6 h-6 bg-blue-600 rounded-full border-4 border-white"
+                      ></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg">
+                      <h3 class="text-xl font-semibold mb-2">
+                        Kiểm Thử & Tối Ưu
+                      </h3>
+                      <p class="text-gray-600">
+                        Thực hiện kiểm thử toàn diện và tối ưu hóa hiệu năng hệ
+                        thống.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="relative">
+                  <div class="mr-auto w-1/2 pr-8">
+                    <div
+                      class="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    >
+                      <div
+                        class="w-6 h-6 bg-green-600 rounded-full border-4 border-white"
+                      ></div>
+                    </div>
+                    <div
+                      class="bg-white p-6 rounded-xl shadow-lg border-2 border-green-500"
+                    >
+                      <h3 class="text-xl font-semibold mb-2">
+                        Triển Khai & Vận Hành
+                      </h3>
+                      <p class="text-gray-600">
+                        Đưa hệ thống vào hoạt động và liên tục cải tiến dựa trên
+                        phản hồi.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team Values -->
+      <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+          <h2 class="text-3xl font-bold mb-12 text-center">Giá Trị Cốt Lõi</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+              <div class="text-blue-600 text-4xl mb-4">
+                <i class="fas fa-heart"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Tận Tâm</h3>
+              <p class="text-gray-600">
+                Luôn đặt trải nghiệm và lợi ích của người dùng lên hàng đầu trong
+                mọi quyết định.
+              </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+              <div class="text-blue-600 text-4xl mb-4">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Sáng Tạo</h3>
+              <p class="text-gray-600">
+                Không ngừng đổi mới và tìm kiếm giải pháp tốt hơn cho các thách
+                thức.
+              </p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+              <div class="text-blue-600 text-4xl mb-4">
+                <i class="fas fa-handshake"></i>
+              </div>
+              <h3 class="text-xl font-semibold mb-4">Tin Cậy</h3>
+              <p class="text-gray-600">
+                Xây dựng niềm tin thông qua tính minh bạch và độ tin cậy cao
+                trong mọi giao dịch.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Về Chúng Tôi</h4>
+            <p class="text-gray-400">
+              Nền tảng đấu giá biển số xe trực tuyến hàng đầu với công nghệ hiện
+              đại và bảo mật cao
+            </p>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Hỗ Trợ 24/7</h4>
+            <ul class="space-y-2">
+              <li class="text-gray-400">Hotline: 1900 xxxx</li>
+              <li class="text-gray-400">Email: support@bienso.vn</li>
+              <li class="text-gray-400">Zalo: zalo.me/bienso</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-semibold mb-4">Chứng Nhận</h4>
+            <p class="text-gray-400">
+              Được cấp phép bởi Bộ Công an và các cơ quan chức năng liên quan
+            </p>
+          </div>
+        </div>
+        <div
+          class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400"
+        >
+          <p>&copy; 2024 BiểnSốĐẹp. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
